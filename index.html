@@ -82,11 +82,11 @@
 	</div>
 	<div style="height: 20px;"></div>
 		<div id="countbar" class="bar">
-			<h1 id="countdown" style="text-align: center;">
-			</h1>
+			<h1 id="countdown" style="text-align: center; padding-top: -0px;"></h1>
 			<script>
 				var wid = Math.floor(window.innerWidth / 5);
-				if (wid >= 200) wid = 200;
+				//if (wid >= 200) wid = 200;
+				if (wid >= 200) wid = Math.floor(window.innerWidth / 10);
 				let pa = document.getElementById("countdown");
 				pa.style.fontSize = wid + "px";
 			</script>
