@@ -20,11 +20,11 @@
 	.bar {
 		width: 100%;
 		height: 50%;
-		background: #eee;
-		border-radius: 0.4em;
+		background: #fff;
+		border-radius: 20px;
 		box-shadow: 0.3em 0.3em 0.7em #00000015;
 		transition: border 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-		border: #eee 0.2em solid;
+		border: #fff 0.2em solid;
 	}
 
 	.bot {
@@ -37,7 +37,7 @@
 		color: rgba(0, 0, 0, 0.85);
 		cursor: pointer;
 		display: inline-flex;
-		font-family: system-ui, -apple-system, system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+		font-family: "微软雅黑", sans-serif;
 		font-size: 16px;
 		font-weight: 600;
 		justify-content: center;
@@ -73,7 +73,7 @@
 	}
 </style>
 
-
+<script> var isall = false; </script>
 
 <body style="background-color: lightgreen;">
 	<title> Gary`s NEYC Clock </title>
@@ -81,93 +81,92 @@
 		<h1> Gary`s NEYC Clock </h1>
 	</div>
 	<div style="height: 20px;"></div>
-		<div id="countbar" class="bar">
-			<h1 id="countdown" style="text-align: center; padding-top: -0px;">
-				02:00:00
-			</h1>
-			<script>
+	<div id="countbar" class="bar">
+		<h1 id="countdown" style="text-align: center; padding-top: -0px;">
+			02:00:00
+		</h1>
+		<script>
+			function Condition() {
 				var wid = Math.floor(window.innerWidth / 5);
-				//if (wid >= 200) wid = 200;
-				if (wid >= 200) wid = Math.floor(window.innerWidth / 10);
+				if (~isall && wid >= Math.floor(window.innerHeight / 5)) wid = Math.floor(window.innerHeight / 5);
+				if (isall && wid >= Math.floor(window.innerHeight / 2)) wid = Math.floor(window.innerHeight / 2);
 				let pa = document.getElementById("countdown");
 				pa.style.fontSize = wid + "px";
-			</script>
-		</div>
-		<div id="set" class="bot" style="height: 50px" onclick="SetTime()">设置</div>
-		<div id="begin" class="bot" style="height: 50px" onclick="Begin()">开始</div>
-		<div id="stop" class="bot" style="height: 50px" onclick="Stop()">暂停</div>
-		<div id="all" class="bot" style="height: 50px" onclick="All()">全屏</div>
-		<script>
-			// 目标日期
-			var time = 2 * 60 * 60, doing = false;
-
-			// 更新倒计时
-			function CountDown() {
-				var hours = Math.floor(time / (60 * 60)) % 60;
-				var minutes = Math.floor(time / 60) % 60;
-				var seconds = time % 60;
-
-				while (hours.toString().length < 2) hours = "0" + hours;
-				while (minutes.toString().length < 2) minutes = "0" + minutes;
-				while (seconds.toString().length < 2) seconds = "0" + seconds;
-
-				// 更新页面上的倒计时显示
-				document.getElementById("countdown").innerHTML = hours + ":" + minutes + ":" + seconds;
-
-				time--;
+				setTimeout(Condition, 100);
 			}
 
-			function Counting() {
-				if (doing && time >= 0) {
-					CountDown();
-					setTimeout(Counting, 1000);
-				}
-				else if (doing) alert("倒计时已结束");
-			}
+			Condition();
+		</script>
+	</div>
+	<div id="set" class="bot" style="height: 50px" onclick="SetTime()">设置</div>
+	<div id="begin" class="bot" style="height: 50px" onclick="Begin()">开始</div>
+	<div id="stop" class="bot" style="height: 50px" onclick="Stop()">暂停</div>
+	<div id="all" class="bot" style="height: 50px" onclick="All()">全屏</div>
+	<script>
+		var time = 2 * 60 * 60, doing = false;
 
-			function SetTime() {
-				var h = prompt("请输入倒计时时长(时)");
-				if (h == null) return;
-				var m = prompt("请输入倒计时时长(分)");
-				if (m == null) return;
-				var s = prompt("请输入倒计时时长(秒)");
-				if (s == null) return;
-				if (h >= 0 && m >= 0 && s >= 0) {
-					time = parseInt(h) * 60 * 60 + parseInt(m) * 60 + parseInt(s);
-					CountDown();
-					doing = false;
-				}
-			}
+		function CountDown() {
+			var hours = Math.floor(time / (60 * 60)) % 60;
+			var minutes = Math.floor(time / 60) % 60;
+			var seconds = time % 60;
 
-			function Begin() {
-				doing = true;
-				Counting();
-			}
+			while (hours.toString().length < 2) hours = "0" + hours;
+			while (minutes.toString().length < 2) minutes = "0" + minutes;
+			while (seconds.toString().length < 2) seconds = "0" + seconds;
 
-			function Stop() {
+			document.getElementById("countdown").innerHTML = hours + ":" + minutes + ":" + seconds;
+
+			time--;
+		}
+
+		function Counting() {
+			if (doing && time >= 0) {
+				CountDown();
+				setTimeout(Counting, 1000);
+			}
+			else if (doing) alert("倒计时已结束");
+		}
+
+		function SetTime() {
+			var h = prompt("请输入倒计时时长(时)");
+			if (h == null) return;
+			var m = prompt("请输入倒计时时长(分)");
+			if (m == null) return;
+			var s = prompt("请输入倒计时时长(秒)");
+			if (s == null) return;
+			if (h >= 0 && m >= 0 && s >= 0) {
+				time = parseInt(h) * 60 * 60 + parseInt(m) * 60 + parseInt(s);
+				CountDown();
 				doing = false;
 			}
-			
-			function All() {
-				document.documentElement.requestFullscreen();
-				let el = document.getElementById("head");
-				el.style.display = "none";
-				el = document.getElementById("set");
-				el.style.display = "none";
-				el = document.getElementById("begin");
-				el.style.display = "none";
-				el = document.getElementById("stop");
-				el.style.display = "none";
-				el = document.getElementById("all");
-				el.style.display = "none";
-				el = document.getElementById("countbar");
-				el.style.height = "90%";
-			}
+		}
 
-			// 启动倒计时
-			//Counting();
-		</script>
+		function Begin() {
+			doing = true;
+			Counting();
+		}
+
+		function Stop() {
+			doing = false;
+		}
+
+		function All() {
+			document.documentElement.requestFullscreen();
+			let el = document.getElementById("head");
+			el.style.display = "none";
+			el = document.getElementById("set");
+			el.style.display = "none";
+			el = document.getElementById("begin");
+			el.style.display = "none";
+			el = document.getElementById("stop");
+			el.style.display = "none";
+			el = document.getElementById("all");
+			el.style.display = "none";
+			el = document.getElementById("countbar");
+			el.style.height = "90%";
+			isall = true;
+		}
+	</script>
 </body>
 
 </html>
-
