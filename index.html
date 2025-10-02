@@ -104,7 +104,7 @@
 	<div id="stop" class="bot" style="height: 50px" onclick="Stop()">暂停</div>
 	<div id="all" class="bot" style="height: 50px" onclick="All()">全屏</div>
 	<script>
-		var time = 2 * 60 * 60, doing = false;
+		var time = 2 * 60 * 60, doing = false, cnting = false;
 
 		function CountDown() {
 			var hours = Math.floor(time / (60 * 60)) % 60;
@@ -138,17 +138,17 @@
 			if (h >= 0 && m >= 0 && s >= 0) {
 				time = parseInt(h) * 60 * 60 + parseInt(m) * 60 + parseInt(s);
 				CountDown();
-				doing = false;
+				doing = false, cnting = false;
 			}
 		}
 
 		function Begin() {
 			doing = true;
-			Counting();
+			if (!cnting) Counting(), cnting = true;
 		}
 
 		function Stop() {
-			doing = false;
+			doing = false, cnting = false;
 		}
 
 		function All() {
